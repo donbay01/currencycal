@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 Widget customDropDown (List<String>? items, String? value, void onChange(val)){
 
-  return Container(
-    child: Padding(
+  return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -19,7 +18,6 @@ Widget customDropDown (List<String>? items, String? value, void onChange(val)){
           items: items?.map(buildMenuItem).toList(),
         ),
       ),
-    ),
   );
 }
 DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(

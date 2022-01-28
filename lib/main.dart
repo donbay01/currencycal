@@ -1,10 +1,12 @@
 
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, use_function_type_syntax_for_parameters, avoid_print, void_checks
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, use_function_type_syntax_for_parameters, avoid_print, void_checks, unrelated_type_equality_checks, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 
 import 'package:currency_calculator/service/api_client.dart';
+import 'package:currency_calculator/widgets/chart_widget.dart';
 import 'package:currency_calculator/widgets/dropDown.dart';
+import 'package:currency_calculator/widgets/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -262,14 +264,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.5,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.blue[700],
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(35),topRight: Radius.circular(35))
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('Today',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                Text('30 days',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500)),
+                Text('60 days',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500)),
+              ],
             ),
+            SizedBox(height: 20,),
+            ChartWidget(),
+            SizedBox(height: 40,),
           ],
         ),
       ),
@@ -277,6 +282,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   getResults() async {
+    if (valueController.text.isEmpty){
+      displayToastMessage('Kindly Input an Amount', context);
+    } else if (valueController.text == '0'){
+      displayToastMessage('The number 0 is not an amount', context);
+    }
     rate = await client.getRate(currencyFrom!, currencyTo!);
     setState(() {
       result = (rate! * double.parse(valueController.text)).toStringAsFixed(3);
